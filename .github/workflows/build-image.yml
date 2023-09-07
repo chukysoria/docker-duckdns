@@ -1,0 +1,73 @@
+name: Build Image
+
+on:
+  release:
+    types: [published]
+  push:
+
+env:
+  USER: chukysoria
+  IMAGE: duckdns
+  DESCRIPTION: "[Duckdns](https://duckdns.org/) is a free service which will point a DNS (sub domains of duckdns.org) to an IP of your choice. The service is completely free, and doesn't require reactivation or forum posts to maintain its existence."
+  BUILD_VERSION_ARG: DUCKDNS_VERSION
+  EXT_RELEASE_CLEAN: VERSION
+  EXT_RELEASE: VERSION
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set current date as env variable
+        run: echo "NOW=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+        with:
+          platforms: arm
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          # list of Docker images to use as base name for tags
+          images: |
+             ghcr.io/${{ env.USER }}/${{ env.IMAGE }}            
+          # generate Docker tags based on the following events/attributes
+          tags: |
+            type=sha,format=long
+            type=raw,value=${{ github.ref_name }}
+            type=ref,event=branch,prefix=${{ env.EXT_RELEASE_CLEAN }}-
+            type=ref,event=tag,prefix=${{ env.EXT_RELEASE_CLEAN }}-
+          labels: |
+            org.opencontainers.image.created=${{ env.NOW }}
+            org.opencontainers.image.authors=Carlos Sanchez
+            org.opencontainers.image.url=https://github.com/${{ env.USER }}/docker-${{ env.IMAGE }}/packages
+            org.opencontainers.image.documentation=https://docs.linuxserver.io/images/docker-${{ env.IMAGE }}  
+            org.opencontainers.image.source=https://github.com/chukysoria/docker-${{ env.IMAGE }}  
+            org.opencontainers.image.version=${{ env.EXT_RELEASE_CLEAN }}-ls${{ github.ref_name }}
+            org.opencontainers.image.revision=${{ github.sha }}
+            org.opencontainers.image.vendor=Carlos Sanchez
+            org.opencontainers.image.licenses=GPL-3.0-only
+            org.opencontainers.image.ref.name=${{ github.sha }}
+            org.opencontainers.image.title=${{ env.IMAGE }}  
+            org.opencontainers.image.description=${{ env.DESCRIPTION }}        
+
+      - name: Build and push
+        uses: docker/build-push-action@v4
+        with:
+          platforms: linux/arm/v7
+          push: ${{ github.event_name == 'release' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          pull: true
+          build-args: |
+            ${{ env.BUILD_VERSION_ARG }}=${{ env.EXT_RELEASE }}
+            VERSION=${{ github.ref_name }}
+            BUILD_DATE=${{ env.NOW }}
