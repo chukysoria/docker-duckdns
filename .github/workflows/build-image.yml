@@ -42,16 +42,12 @@ jobs:
              ghcr.io/${{ env.USER }}/${{ env.IMAGE }}            
           # generate Docker tags based on the following events/attributes
           tags: |
-            type=sha
             type=raw,value=latest
-            type=raw,value=${{ github.ref_name }}
-            type=ref,event=branch,prefix=${{ env.EXT_RELEASE_CLEAN }}-
-            type=ref,event=tag,prefix=${{ env.EXT_RELEASE_CLEAN }}-
             type=sha,prefix=${{ env.ARCH }}-
-            type=raw,value=${{ github.ref_name }},prefix=${{ env.ARCH }}-
-            type=ref,event=branch,prefix=${{ env.ARCH }}-${{ env.EXT_RELEASE_CLEAN }}-
-            type=ref,event=tag,prefix=${{ env.ARCH }}-${{ env.EXT_RELEASE_CLEAN }}-
-            type=raw,value=latest,prefix=${{ env.ARCH }}-
+            type=sha,suffix=-${{ github.ref_name }}
+            type=sha,prefix=${{ env.ARCH }}-${{ env.EXT_RELEASE_CLEAN }}-
+            type=sha,prefix=${{ env.ARCH }}-,suffix=-${{ github.ref_name }}
+            type=raw,value=latest,prefix=${{ env.ARCH }}-          
           labels: |
             org.opencontainers.image.created=${{ env.NOW }}
             org.opencontainers.image.authors=Carlos Sanchez
