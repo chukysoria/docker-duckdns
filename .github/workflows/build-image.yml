@@ -10,8 +10,8 @@ env:
   IMAGE: duckdns
   DESCRIPTION: "[Duckdns](https://duckdns.org/) is a free service which will point a DNS (sub domains of duckdns.org) to an IP of your choice. The service is completely free, and doesn't require reactivation or forum posts to maintain its existence."
   BUILD_VERSION_ARG: DUCKDNS_VERSION
-  EXT_RELEASE_CLEAN: VERSION
-  EXT_RELEASE: VERSION
+  EXT_RELEASE_CLEAN: v1.0.0
+  EXT_RELEASE: v1.0.0
   ARCH: arm32v7
 
 jobs:
@@ -43,6 +43,7 @@ jobs:
           # generate Docker tags based on the following events/attributes
           tags: |
             type=sha
+            type=raw,value=latest
             type=raw,value=${{ github.ref_name }}
             type=ref,event=branch,prefix=${{ env.EXT_RELEASE_CLEAN }}-
             type=ref,event=tag,prefix=${{ env.EXT_RELEASE_CLEAN }}-
