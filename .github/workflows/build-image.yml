@@ -41,10 +41,11 @@ jobs:
           images: |
              ghcr.io/${{ env.USER }}/${{ env.IMAGE }}            
           # generate Docker tags based on the following events/attributes
+          flavor: 
+            latest=true
           tags: |
-            type=raw,value=latest
-            type=sha,prefix=${{ env.ARCH }}-
-            type=sha,suffix=-${{ github.ref_name }}
+            type=sha,prefix=${{ env.EXT_RELEASE_CLEAN }}-
+            type=sha,prefix="",suffix=-${{ github.ref_name }}
             type=sha,prefix=${{ env.ARCH }}-${{ env.EXT_RELEASE_CLEAN }}-
             type=sha,prefix=${{ env.ARCH }}-,suffix=-${{ github.ref_name }}
             type=raw,value=latest,prefix=${{ env.ARCH }}-          
