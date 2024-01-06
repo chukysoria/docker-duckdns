@@ -14,7 +14,7 @@ LABEL maintainer="chukysoria"
 RUN \
   echo "**** install packages ****" && \
   apk add --no-cache \
-    bind-tools=9.18.19-r1 \
+    bind-tools=9.18.21-r0 \
     logrotate=3.21.0-r1
 
 # add local files
