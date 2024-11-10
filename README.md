@@ -70,6 +70,10 @@ Using the `UPDATE_IP` variable whatever its value (`ipv4`, `ipv6` or `both`) use
 
 Omitting the `UPDATE_IP` variable uses DuckDNS for detection and only supports IPv4.
 
+## Read-Only Operation
+
+This image can be run with a read-only container filesystem. For details please [read the docs](https://docs.linuxserver.io/misc/read-only/).
+
 ## Usage
 
 To help you get started creating a container from this image you can either use docker-compose or the docker cli.
@@ -129,6 +133,7 @@ Containers are configured using parameters passed at runtime (such as those abov
 | `-e UPDATE_IP=ipv4` | Set to `ipv6` or `ipv4` to update  **only** your public IPv4/6 address. Set to `both` to update IPv6 and IPv4 address. This variable makes use of a [third-party service](#notice-regarding-automatic-detection). Omitting this variable uses DuckDNS for detection and only supports IPv4. `both` and `ipv6` modes needs [host networking](#networking-net). |
 | `-e LOG_FILE=false` | Set to `true` to log to file (also need to map /config). |
 | `-v /config` | Persistent config files. Also set `LOG_FILE=true` to keep address history. |
+| `--read-only=true` | Run container with a read-only filesystem. Please [read the docs](https://docs.linuxserver.io/misc/read-only/). |
 
 ## Environment variables from files (Docker secrets)
 
@@ -268,7 +273,8 @@ Below are the instructions for updating containers:
 
 ### Image Update Notifications - Diun (Docker Image Update Notifier)
 
-**tip**: We recommend [Diun](https://crazymax.dev/diun/) for update notifications. Other tools that automatically update containers unattended are not recommended or supported.
+>[!TIP]
+>We recommend [Diun](https://crazymax.dev/diun/) for update notifications. Other tools that automatically update containers unattended are not recommended or supported.
 
 ## Building locally
 
@@ -293,6 +299,8 @@ Once registered you can define the dockerfile to use with `-f Dockerfile.aarch64
 
 ## Versions
 
+* **24.06.24:** - Rebase to Alpine 3.20.
+* **17.06.24:** - Bump CI_DELAY to 120 seconds as ARM builds were failing.
 * **30.03.24:** - Added IP address to logging output when IP changes.
 * **23.12.23:** - Rebase to Alpine 3.19.
 * **14.10.23:** - Rework shell script for case insensitivity and update readme to be more clear.
