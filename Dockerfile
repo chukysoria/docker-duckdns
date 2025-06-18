@@ -13,7 +13,7 @@ LABEL maintainer="chukysoria"
 RUN \
   echo "**** install packages ****" && \
   apk add --no-cache \
-    bind-tools=9.20.9-r0 \
+    bind-tools=9.20.10-r0 \
     logrotate=3.21.0-r1 && \
   printf "Linuxserver.io version: ${VERSION}\nBuild-date: ${BUILD_DATE}" > /build_version
 
