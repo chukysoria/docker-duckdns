@@ -14,7 +14,7 @@ RUN \
   echo "**** install packages ****" && \
   apk add --no-cache \
     bind-tools=9.20.16-r0 \
-    logrotate=3.21.0-r1 && \
+    logrotate=3.22.0-r0 && \
   printf "Linuxserver.io version: ${VERSION}\nBuild-date: ${BUILD_DATE}" > /build_version
 
 # add local files
